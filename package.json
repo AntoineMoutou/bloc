@@ -1,0 +1,23 @@
+{
+  "name": "bloc",
+  "version": "1.0.0",
+  "description": "Bouldering Leaderboard Of the Club",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antoinemoutou/bloc.git"
+  },
+  "author": "Antoine Moutou <moutou.antoine@hotmail.fr> (https://www.npmjs.com/~antoinemoutou)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antoinemoutou/bloc/issues"
+  },
+  "homepage": "https://github.com/antoinemoutou/bloc#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "path": "^0.12.7"
+  }
+}
