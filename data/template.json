@@ -1,0 +1,26 @@
+{
+	"contest": {
+		"blocs": [{
+				"id": "bloc1",
+				"point": "500",
+				"climbers": ["climber1", "climber2"]
+			},
+			{
+				"id": "bloc2",
+				"point": "1000",
+				"climbers": ["climber1"]
+			}
+		],
+		"climbers": [{
+				"name": "climber1",
+				"score": "1500",
+				"blocs": ["bloc1", "bloc2"]
+			},
+			{
+				"name": "climber2",
+				"score": "500",
+				"blocs": ["bloc1"]
+			}
+		]
+	}
+}
