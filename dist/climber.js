@@ -1,16 +1,14 @@
 class Climber{
-  constructor(name){
+  constructor(name, score, blocs){
     this.name = name;
-    this.score = 0;
-    this.blocs = []; //liste de bloc.id
+    this.score = score; // 0
+    this.blocs = blocs; // []
   }
 
-  updateScore() {
-    let newScore = 0;
-    for (let i = 0; i < this.blocs.length; i++) {
-      newScore += this.blocs[i].points;
-    }
-    this.score = newScore;
-  };
+  static compareClimber(a,b) {
+    return (parseInt(a.score) < parseInt(b.score));
+  }
 
 }
+
+module.exports = Climber;

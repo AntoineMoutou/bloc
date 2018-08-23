@@ -18,6 +18,7 @@
   "homepage": "https://github.com/antoinemoutou/bloc#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "jsonfile": "^4.0.0",
     "path": "^0.12.7"
   }
 }

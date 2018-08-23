@@ -8,18 +8,23 @@
 			{
 				"id": "bloc2",
 				"point": "1000",
-				"climbers": ["climber1"]
+				"climbers": ["climber2"]
 			}
 		],
 		"climbers": [{
 				"name": "climber1",
+				"score": "500",
+				"blocs": ["bloc1"]
+			},
+			{
+				"name": "climber2",
 				"score": "1500",
 				"blocs": ["bloc1", "bloc2"]
 			},
 			{
-				"name": "climber2",
-				"score": "500",
-				"blocs": ["bloc1"]
+				"name": "climber3",
+				"score": "0",
+				"blocs": []
 			}
 		]
 	}
