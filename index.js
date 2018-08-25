@@ -4,8 +4,6 @@ const path = require('path');
 const jsonfile = require('jsonfile')
 
 
-const Climber = require("./dist/climber.js");
-
 // add dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
@@ -22,7 +20,7 @@ app.get('/form', function(req, res) {
   res.sendFile(path.join(__dirname,'views/form.html'));
 });
 
-app.get('/updateLeaderboard', function (req, res) {
+app.get('/getLeaderboard', function (req, res) {
 
   let jsonFilePath = path.join(__dirname, 'data/currentContest.json');
 
@@ -32,15 +30,8 @@ app.get('/updateLeaderboard', function (req, res) {
     }
     else {
 
-      //create climber object list and fill it with JSON data
-      let climbers = [];
-      obj.contest.climbers.forEach(function(climber) {
-        climbers.push(new Climber(climber.name,climber.score,climber.blocs));
-      });
-
-      climbers.sort(Climber.compareClimber);
-
-      res.send(JSON.stringify(climbers));
+      res.setHeader('Content-Type', 'application/json');
+      res.json(obj);
 
     }//end of else
   });
@@ -49,7 +40,7 @@ app.get('/updateLeaderboard', function (req, res) {
 
 
 // POST method route
-app.post('/addClimber', function (req, res) {
+app.post('/addClimber/:name', function (req, res) {
 
   let jsonFilePath = path.join(__dirname, 'data/currentContest.json');
 
@@ -59,35 +50,43 @@ app.post('/addClimber', function (req, res) {
     }
     else {
 
-      console.log(req);
+      let alreadyNamed = false;
 
-      obj.contest.climbers.push(new Climber(req.params.name,0,[]));
-
-      climbers.sort(Climber.compareClimber);
-
-      jsonfile.writeFile(jsonFilePath,old_data),function(err) {
-        if (err) {
-          res.send('Server error');
+      obj.contest.climbers.forEach(function(climber) {
+        if (climber.name == req.params.name) {
+          alreadyNamed = true;
         }
-        else {
-          res.send("Climber added !")
-        }
+      });
+
+      if (alreadyNamed) {
+        res.send('Climber already exists.')
+      } else {
+        obj.contest.climbers.push({"name":req.params.name,"score":0,"blocs":[]});
+
+        obj.contest.climbers.sort((a,b) => (a.name > b.name) ); // sort by alphabet
+
+        jsonfile.writeFile(jsonFilePath,obj,function(err) {
+          if (err) {
+            res.send('Server error');
+          }
+          else {
+            res.send("Climber added !")
+          }
+        })
       }
     }//end of else
   });
 });
 
-app.post('/addPerformance', function (req, res) {
+app.post('/addPerformance/:name/:id', function (req, res) {
 
   let jsonFilePath = path.join(__dirname, 'data/currentContest.json');
 
   jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
     if (err) {
-      res.send('Server error');
+      res.send('Server error 1');
     }
     else {
-
-      console.log(req);
 
       let pointUpdated = false;
       let scoresUpdated = false;
@@ -102,11 +101,21 @@ app.post('/addPerformance', function (req, res) {
           bloc.point = parseInt(1000 / bloc.climbers.length);
           pointUpdated = true;
 
+          obj.contest.climbers.forEach(function(climber) {
+            if (climber.name == req.params.name) {
+              climber.blocs.push(req.params.id);
+            }
+          });
+
           if (pointUpdated) {
             // set new climbers updateScores
             bloc.climbers.forEach(function(climberName) {
               obj.contest.climbers.forEach(function(climber) {
-                if (climberName == climber.name) {
+                if (climber.name == req.params.name) {
+                  climber.score = climber.score + bloc.point;
+                  nbClimberUpdated += 1;
+                }
+                else if(climberName == climber.name) {
                   climber.score = climber.score + bloc.point - oldPoint;
                   nbClimberUpdated += 1;
                 }
@@ -118,9 +127,9 @@ app.post('/addPerformance', function (req, res) {
       });
 
       if (scoresUpdated) {
-        jsonfile.writeFile(jsonFilePath,old_data),function(err) {
+        jsonfile.writeFile(jsonFilePath,obj),function(err) {
           if (err) {
-            res.send('Server error');
+            res.send('Server error 2');
           }
           else {
             res.send("Performance added !");
@@ -128,13 +137,13 @@ app.post('/addPerformance', function (req, res) {
         }
       }
       else {
-        res.send("Server error");
+        res.send("Server error 3");
       }
     }//end of else
   });
 });
 
-app.post('/removePerformance', function (req, res) {
+app.post('/removePerformance/:name/:id', function (req, res) {
 
   let jsonFilePath = path.join(__dirname, 'data/currentContest.json');
 
@@ -144,7 +153,6 @@ app.post('/removePerformance', function (req, res) {
     }
     else {
 
-      console.log(req);
 
       let pointUpdated = false;
       let scoresUpdated = false;
@@ -160,6 +168,14 @@ app.post('/removePerformance', function (req, res) {
           bloc.point = parseInt(1000 / bloc.climbers.length);
           pointUpdated = true;
 
+          obj.contest.climbers.forEach(function(climber) {
+            if (climber.name == req.params.name) {
+              let idx2 = climber.blocs.findIndex(a => (a == req.params.id));
+              climber.blocs.splice(idx2,1);
+              climber.score -= oldPoint;
+            }
+          })
+
           if (pointUpdated) {
             // set new climbers updateScores
             bloc.climbers.forEach(function(climberName) {
@@ -176,14 +192,14 @@ app.post('/removePerformance', function (req, res) {
       });
 
       if (scoresUpdated) {
-        jsonfile.writeFile(jsonFilePath,old_data),function(err) {
+        jsonfile.writeFile(jsonFilePath,obj,function(err) {
           if (err) {
             res.send('Server error');
           }
           else {
             res.send("Performance removed !");
           }
-        }
+        })
       }
       else {
         res.send("Server error");
