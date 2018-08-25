@@ -1,3 +1,9 @@
+let port = 3000;
+
+if (process.argv.length > 2) {
+  port = process.argv[2];
+}
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -209,7 +215,7 @@ app.post('/removePerformance/:name/:id', function (req, res) {
 });
 
 
-app.listen(3000, function () {
-  console.log('App listening on port 3000 !')
+app.listen(port, function () {
+  console.log('App listening on port ' + port + ' !')
 
 })
