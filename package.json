@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"start": "node index.js"
-	
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +20,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "jsonfile": "^4.0.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "pm2": "^3.0.4"
   }
 }

@@ -128,6 +128,7 @@ function updateSelectName() {
 function displayNames(jsonObj) {
 
   let idx = selectName.selectedIndex;
+  let oldSize = selectName.length;
 
   selectName.innerHTML = "";
   checkboxes.forEach(cb => {cb.checked = false});
@@ -145,11 +146,16 @@ function displayNames(jsonObj) {
 
   selectName.selectedIndex = idx;
 
-  jsonObj.contest.climbers.forEach(function(climber) {
-    if (climber.name == selectName[selectName.selectedIndex].value) {
-      climber.blocs.forEach(function(blocid) {
-        document.getElementById(blocid).checked = true;
-      })
-    }
-  })
+  if (oldSize==0) {
+
+  } else {
+    jsonObj.contest.climbers.forEach(function(climber) {
+      if (climber.name == selectName[selectName.selectedIndex].value) {
+        climber.blocs.forEach(function(blocid) {
+          document.getElementById(blocid).checked = true;
+        })
+      }
+    })
+  }
+
 }

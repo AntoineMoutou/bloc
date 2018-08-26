@@ -2,7 +2,7 @@ let port = 3000;
 
 if (process.argv.length > 2) {
   port = process.argv[2];
-}
+};
 
 const express = require('express');
 const app = express();
