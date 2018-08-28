@@ -96,11 +96,11 @@ app.post('/addPerformance/:name/:id', function (req, res) {
 
       let pointUpdated = false;
       let scoresUpdated = false;
-      let nbClimberUpdated = 0;
-      let oldPoint = 0;
 
       // set new point for the blocs
       obj.contest.blocs.forEach(function(bloc) {
+        let nbClimberUpdated = 0;
+        let oldPoint = 0;
         if (bloc.id == req.params.id) {
           bloc.climbers.push(req.params.name);
           oldPoint = bloc.point;
@@ -117,7 +117,7 @@ app.post('/addPerformance/:name/:id', function (req, res) {
             // set new climbers updateScores
             bloc.climbers.forEach(function(climberName) {
               obj.contest.climbers.forEach(function(climber) {
-                if (climber.name == req.params.name) {
+                if (climber.name == req.params.name && climber.name == climberName) {
                   climber.score = climber.score + bloc.point;
                   nbClimberUpdated += 1;
                 }
@@ -143,6 +143,7 @@ app.post('/addPerformance/:name/:id', function (req, res) {
         }
       }
       else {
+
         res.send("Server error 3");
       }
     }//end of else
@@ -216,6 +217,6 @@ app.post('/removePerformance/:name/:id', function (req, res) {
 
 
 app.listen(port, function () {
-  console.log('App listening on port ' + port + ' !')
+  console.log('App listening on port ' + port + ' !');
 
 })

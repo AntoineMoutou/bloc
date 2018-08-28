@@ -35,13 +35,17 @@ function displayLeaderboard(jsonObj) {
 
   // leaderboard header
   let divHeader = document.createElement("tr");
-  let divHName = document.createElement("td");
-  let divHRank = document.createElement("td");
-  let divHScore = document.createElement("td");
+  let divHName = document.createElement("th");
+  let divHRank = document.createElement("th");
+  let divHScore = document.createElement("th");
 
   divHName.innerHTML = "Name";
   divHScore.innerHTML = "Score";
   divHRank.innerHTML = "Rank";
+
+  divHRank.style.width = "20%";
+  divHName.style.width = "60%";
+  divHScore.style.width = "20%";
 
   divHeader.appendChild(divHRank);
   divHeader.appendChild(divHName);
@@ -66,6 +70,10 @@ function displayLeaderboard(jsonObj) {
     divName.innerHTML = name;
     divScore.innerHTML = score;
     divRank.innerHTML = rank++;
+
+    divRank.style.width = "20%";
+    divName.style.width = "60%";
+    divScore.style.width = "20%";
 
     divClimber.appendChild(divRank);
     divClimber.appendChild(divName);
