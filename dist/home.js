@@ -31,14 +31,37 @@ function updateLeaderboard() {
 function displayLeaderboard(jsonObj) {
   let rank = 1;
 
+  leaderboard.innerHTML = "";
+
+  // leaderboard header
+  let divHeader = document.createElement("tr");
+  let divHName = document.createElement("td");
+  let divHRank = document.createElement("td");
+  let divHScore = document.createElement("td");
+
+  divHName.innerHTML = "Name";
+  divHScore.innerHTML = "Score";
+  divHRank.innerHTML = "Rank";
+
+  divHeader.appendChild(divHRank);
+  divHeader.appendChild(divHName);
+  divHeader.appendChild(divHScore);
+
+  divHeader.style.display = "flex";
+  divHeader.style.flexDirction = "row";
+  divHeader.style.justifyContent = "space-around";
+  divHeader.style.backgroundColor = "grey";
+
+  leaderboard.appendChild(divHeader);
+
   jsonObj.contest.climbers.forEach(function(climber) {
     name = climber.name;
     score = climber.score;
 
-    let divClimber = document.createElement("div");
-    let divName = document.createElement("div");
-    let divRank = document.createElement("div");
-    let divScore = document.createElement("div");
+    let divClimber = document.createElement("tr");
+    let divName = document.createElement("td");
+    let divRank = document.createElement("td");
+    let divScore = document.createElement("td");
 
     divName.innerHTML = name;
     divScore.innerHTML = score;

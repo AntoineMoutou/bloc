@@ -6,11 +6,10 @@ let header = document.getElementById('header');
 function setHeader() {
 
   // add title
-  let title = document.createElement("h1");
-  title.innerHTML = "BLOC";
+
   let a1 = document.createElement("a");
+  a1.innerHTML = "Home";
   a1.href = "/home";
-  a1.appendChild(title);
   header.appendChild(a1);
 
   // add subtitle
@@ -21,7 +20,7 @@ function setHeader() {
 
   //add link to form page
   let addBloc = document.createElement("a");
-  addBloc.innerHTML = "Add bloc"
+  addBloc.innerHTML = "Form"
   addBloc.href = "/form";
   header.appendChild(addBloc);
 
