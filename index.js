@@ -1,4 +1,4 @@
-let port = 3000;
+var port = 3000;
 
 if (process.argv.length > 2) {
   port = process.argv[2];
@@ -28,7 +28,7 @@ app.get('/form', function(req, res) {
 
 app.get('/getLeaderboard', function (req, res) {
 
-  let jsonFilePath = path.join(__dirname, 'data/currentContest.json');
+  var jsonFilePath = path.join(__dirname, 'data/currentContest.json');
 
   jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
     if (err) {
@@ -48,7 +48,7 @@ app.get('/getLeaderboard', function (req, res) {
 // POST method route
 app.post('/addClimber/:name', function (req, res) {
 
-  let jsonFilePath = path.join(__dirname, 'data/currentContest.json');
+  var jsonFilePath = path.join(__dirname, 'data/currentContest.json');
 
   jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
     if (err) {
@@ -56,7 +56,7 @@ app.post('/addClimber/:name', function (req, res) {
     }
     else {
 
-      let alreadyNamed = false;
+      var alreadyNamed = false;
 
       obj.contest.climbers.forEach(function(climber) {
         if (climber.name == req.params.name) {
@@ -86,7 +86,7 @@ app.post('/addClimber/:name', function (req, res) {
 
 app.post('/addPerformance/:name/:id', function (req, res) {
 
-  let jsonFilePath = path.join(__dirname, 'data/currentContest.json');
+  var jsonFilePath = path.join(__dirname, 'data/currentContest.json');
 
   jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
     if (err) {
@@ -94,13 +94,13 @@ app.post('/addPerformance/:name/:id', function (req, res) {
     }
     else {
 
-      let pointUpdated = false;
-      let scoresUpdated = false;
+      var pointUpdated = false;
+      var scoresUpdated = false;
 
       // set new point for the blocs
       obj.contest.blocs.forEach(function(bloc) {
-        let nbClimberUpdated = 0;
-        let oldPoint = 0;
+        var nbClimberUpdated = 0;
+        var oldPoint = 0;
         if (bloc.id == req.params.id) {
           bloc.climbers.push(req.params.name);
           oldPoint = bloc.point;
@@ -152,7 +152,7 @@ app.post('/addPerformance/:name/:id', function (req, res) {
 
 app.post('/removePerformance/:name/:id', function (req, res) {
 
-  let jsonFilePath = path.join(__dirname, 'data/currentContest.json');
+  var jsonFilePath = path.join(__dirname, 'data/currentContest.json');
 
   jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
     if (err) {
@@ -161,15 +161,15 @@ app.post('/removePerformance/:name/:id', function (req, res) {
     else {
 
 
-      let pointUpdated = false;
-      let scoresUpdated = false;
-      let nbClimberUpdated = 0;
-      let oldPoint = 0;
+      var pointUpdated = false;
+      var scoresUpdated = false;
+      var nbClimberUpdated = 0;
+      var oldPoint = 0;
 
       // set new point for the blocs
       obj.contest.blocs.forEach(function(bloc) {
         if (bloc.id == req.params.id) {
-          let idx = bloc.climbers.findIndex(a => (a == req.params.name));
+          var idx = bloc.climbers.findIndex(a => (a == req.params.name));
           bloc.climbers.splice(idx,1);
           oldPoint = bloc.point;
           bloc.point = parseInt(1000 / bloc.climbers.length);
@@ -177,7 +177,7 @@ app.post('/removePerformance/:name/:id', function (req, res) {
 
           obj.contest.climbers.forEach(function(climber) {
             if (climber.name == req.params.name) {
-              let idx2 = climber.blocs.findIndex(a => (a == req.params.id));
+              var idx2 = climber.blocs.findIndex(a => (a == req.params.id));
               climber.blocs.splice(idx2,1);
               climber.score -= oldPoint;
             }
