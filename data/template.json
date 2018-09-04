@@ -2,12 +2,12 @@
 	"contest": {
 		"blocs": [{
 			"id": "bloc1",
-			"point": 500,
-			"climbers": ["climber1", "climber2"]
+			"point": 1000,
+			"climbers": []
 		}, {
 			"id": "bloc2",
-			"point": 500,
-			"climbers": ["climber2"]
+			"point": 1000,
+			"climbers": []
 		}, {
 			"id": "bloc3",
 			"point": 1000,
