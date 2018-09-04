@@ -32,7 +32,7 @@ app.get('/getLeaderboard', function (req, res) {
 
   jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
     if (err) {
-      res.send('Server error');
+      res.send('Server error readfile (getLeaderboard)');
     }
     else {
 
@@ -52,7 +52,7 @@ app.post('/addClimber/:name', function (req, res) {
 
   jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
     if (err) {
-      res.send('Server error');
+      res.send('Server error readfile (addClimber)');
     }
     else {
 
@@ -73,7 +73,7 @@ app.post('/addClimber/:name', function (req, res) {
 
         jsonfile.writeFile(jsonFilePath,obj,function(err) {
           if (err) {
-            res.send('Server error');
+            res.send('Server error writefile (addClimber)');
           }
           else {
             res.send("Climber added !")
@@ -90,7 +90,7 @@ app.post('/addPerformance/:name/:id', function (req, res) {
 
   jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
     if (err) {
-      res.send('Server error 1');
+      res.send('Server error readfile (addPerformance)');
     }
     else {
 
@@ -135,7 +135,7 @@ app.post('/addPerformance/:name/:id', function (req, res) {
       if (scoresUpdated) {
         jsonfile.writeFile(jsonFilePath,obj),function(err) {
           if (err) {
-            res.send('Server error 2');
+            res.send('Server error writefile (addPerformance)');
           }
           else {
             res.send("Performance added !");
@@ -144,7 +144,7 @@ app.post('/addPerformance/:name/:id', function (req, res) {
       }
       else {
 
-        res.send("Server error 3");
+        res.send("Server error (pb scoreUpdated add)");
       }
     }//end of else
   });
@@ -156,7 +156,7 @@ app.post('/removePerformance/:name/:id', function (req, res) {
 
   jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
     if (err) {
-      res.send('Server error');
+      res.send('Server error readfile (removePerformance)');
     }
     else {
 
@@ -201,7 +201,7 @@ app.post('/removePerformance/:name/:id', function (req, res) {
       if (scoresUpdated) {
         jsonfile.writeFile(jsonFilePath,obj,function(err) {
           if (err) {
-            res.send('Server error');
+            res.send('Server error writefile (removePerformance)');
           }
           else {
             res.send("Performance removed !");
@@ -209,7 +209,7 @@ app.post('/removePerformance/:name/:id', function (req, res) {
         })
       }
       else {
-        res.send("Server error");
+        res.send("Server error (pb scoreUpated rm)");
       }
     }//end of else
   });
