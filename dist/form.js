@@ -118,7 +118,6 @@ function updateSelectName() {
       else {
         jsonObj = JSON.parse(this.responseText);
         displayNames(jsonObj);
-        console.log(selectName);
       }
     }
   };

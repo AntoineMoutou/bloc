@@ -133,14 +133,14 @@ app.post('/addPerformance/:name/:id', function (req, res) {
       });
 
       if (scoresUpdated) {
-        jsonfile.writeFile(jsonFilePath,obj),function(err) {
+        jsonfile.writeFile(jsonFilePath,obj,function(err) {
           if (err) {
             res.send('Server error writefile (addPerformance)');
           }
           else {
             res.send("Performance added !");
           }
-        }
+        })
       }
       else {
 
