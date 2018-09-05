@@ -14,7 +14,7 @@ function setHeader() {
 
   // add subtitle
   let subtitle = document.createElement("h2");
-  subtitle.innerHTML = "Bouldering Leaderboard Of the Club";
+  subtitle.innerHTML = "VDG Cup";
 
   header.appendChild(subtitle);
 
