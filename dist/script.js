@@ -5,24 +5,32 @@ let header = document.getElementById('header');
 // set the header content for all views
 function setHeader() {
 
-  // add title
+  // add home link + hom icon
 
   let a1 = document.createElement("a");
-  a1.innerHTML = "Home";
   a1.href = "/home";
+
+  let img1 = document.createElement("img");
+  img1.src = "img/home.png";
+
+  a1.appendChild(img1);
+
   header.appendChild(a1);
 
-  // add subtitle
-  let subtitle = document.createElement("h2");
+  // add title
+  let subtitle = document.createElement("h1");
   subtitle.innerHTML = "VDG Cup";
 
   header.appendChild(subtitle);
 
   //add link to form page
-  let addBloc = document.createElement("a");
-  addBloc.innerHTML = "Form"
-  addBloc.href = "/form";
-  header.appendChild(addBloc);
+  let a2 = document.createElement("a");
+  a2.href = "/form";
+  let img2 = document.createElement("img");
+  img2.src = "img/form.png";
+
+  a2.appendChild(img2);
+  header.appendChild(a2);
 
 }
 

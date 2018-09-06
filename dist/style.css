@@ -21,6 +21,8 @@ html, body{
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  width: 100%;
 }
 
 #updateButton{
@@ -40,7 +42,8 @@ html, body{
 }
 
 #leaderboard{
-  width:400px;
+  width: 100%;
+  font-size: 30px;
 }
 
 #addClimber{

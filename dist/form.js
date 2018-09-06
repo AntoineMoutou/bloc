@@ -11,14 +11,13 @@ addClimberButton.addEventListener("click",addClimber);
 selectName.addEventListener("click",updateSelectName);
 checkboxes.forEach(checkbox => checkbox.addEventListener("click",updatePerformance));
 
-
-
 function addClimber() {
 
   let name = climberName.value;
-  let url = "/addClimber/" + name
+  let gender = "M"; //climberGender.value;
+  let url = "/addClimber/" + name + "/" + gender;
 
-  if (name != "") {
+  if (name != "" /* && gender != ""*/) {
     let b = true;
 
     let xhr = new XMLHttpRequest();
@@ -35,9 +34,10 @@ function addClimber() {
     xhr.send();
   }
   else {
-    alert("Please write a name.")
+    alert("Please write a name and / or choose a gender.")
   }
 }
+
 
 function updatePerformance(event) {
   if (this.checked) {
@@ -104,6 +104,7 @@ function removePerformance(event) {
   }
 }
 
+
 function updateSelectName() {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/getLeaderboard", true);
@@ -132,12 +133,14 @@ function displayNames(jsonObj) {
   selectName.innerHTML = "";
   checkboxes.forEach(cb => {cb.checked = false});
 
-  jsonObj.contest.climbers.forEach(function(climber) {
-    let name = climber.name;
+  let climberList = Object.keys(jsonObj.contest.climbers);
+  climberList.sort();
+
+  climberList.forEach(function(climberName) {
 
     let option = document.createElement("option");
-    option.value = name;
-    option.innerText = name;
+    option.value = climberName;
+    option.innerText = climberName;
 
     selectName.appendChild(option);
 
@@ -148,13 +151,10 @@ function displayNames(jsonObj) {
   if (oldSize==0) {
 
   } else {
-    jsonObj.contest.climbers.forEach(function(climber) {
-      if (climber.name == selectName[selectName.selectedIndex].value) {
-        climber.blocs.forEach(function(blocid) {
-          document.getElementById(blocid).checked = true;
-        })
-      }
+    jsonObj.contest.climbers[selectName[selectName.selectedIndex].value].blocs.forEach(function(blocId) {
+      document.getElementById(blocId).checked = true;
     })
   }
-
 }
+
+updateSelectName();
