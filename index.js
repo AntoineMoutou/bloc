@@ -171,29 +171,36 @@ app.post('/removePerformance/:name/:id', function (req, res) {
         if (bloc.id == req.params.id) {
           var idx = bloc.climbers.findIndex(a => (a == req.params.name));
           bloc.climbers.splice(idx,1);
-          oldPoint = bloc.point;
-          bloc.point = parseInt(1000 / bloc.climbers.length);
-          pointUpdated = true;
+          if (bloc.climbers.length = 0) {
+            oldPoint = bloc.point; 
+            bloc.point = 1000;
+          }
+          else {
+            
+            oldPoint = bloc.point;
+            bloc.point = parseInt(1000 / bloc.climbers.length);
+            pointUpdated = true;
 
-          obj.contest.climbers.forEach(function(climber) {
-            if (climber.name == req.params.name) {
-              var idx2 = climber.blocs.findIndex(a => (a == req.params.id));
-              climber.blocs.splice(idx2,1);
-              climber.score -= oldPoint;
-            }
-          })
+            obj.contest.climbers.forEach(function(climber) {
+              if (climber.name == req.params.name) {
+                var idx2 = climber.blocs.findIndex(a => (a == req.params.id));
+                climber.blocs.splice(idx2,1);
+                climber.score -= oldPoint;
+              }
+            })
 
-          if (pointUpdated) {
-            // set new climbers updateScores
-            bloc.climbers.forEach(function(climberName) {
-              obj.contest.climbers.forEach(function(climber) {
-                if (climberName == climber.name) {
-                  climber.score = climber.score + bloc.point - oldPoint;
-                  nbClimberUpdated += 1;
-                }
+            if (pointUpdated) {
+              // set new climbers updateScores
+              bloc.climbers.forEach(function(climberName) {
+                obj.contest.climbers.forEach(function(climber) {
+                  if (climberName == climber.name) {
+                    climber.score = climber.score + bloc.point - oldPoint;
+                    nbClimberUpdated += 1;
+                  }
+                });
               });
-            });
-            scoresUpdated = (bloc.climbers.length == nbClimberUpdated);
+              scoresUpdated = (bloc.climbers.length == nbClimberUpdated);
+            }
           }
         }
       });
@@ -218,5 +225,4 @@ app.post('/removePerformance/:name/:id', function (req, res) {
 
 app.listen(port, function () {
   console.log('App listening on port ' + port + ' !');
-
 })
