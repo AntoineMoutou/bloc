@@ -25,7 +25,7 @@ html, body{
   width: 100%;
 }
 
-#updateButton{
+.button{
   background-color: red;
   margin: 10px;
   padding: 10px;
@@ -37,7 +37,7 @@ html, body{
   font-weight: bold;
 }
 
-#updateButton:hover{
+.button:hover{
   cursor: pointer;
 }
 
@@ -46,7 +46,7 @@ html, body{
   font-size: 30px;
 }
 
-#addClimber{
+.addRow{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -58,22 +58,7 @@ html, body{
   border-bottom: solid 2px black;
 }
 
-#addClimberButton{
-  background-color: red;
-  padding: 10px;
-  border-radius: 4px;
-
-  color: white;
-
-  font-family:sans-serif;
-  font-weight: bold;
-}
-
-#addClimberButton:hover{
-  cursor: pointer;
-}
-
-#addPerformance{
+.addCol{
   display: flex;
   flex-direction: column;
   justify-content: space-around;

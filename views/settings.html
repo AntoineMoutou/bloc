@@ -8,27 +8,27 @@
   <body>
     <div id="header"></div>
 
-    <div id="addRouteSetter">
+    <div id="addRouteSetter" class="addRow">
+
+      <div>
+        <label for="setterName">Route setter name :</label>
+        <input type="text" id="setterName">
+      </div>
+
+      <div id="addRouteSetterButton" class="button">Add route setter</div>
+
+    </div>
+
+    <div id="addBloc" class="addCol">
+
+      <div>
+        <label for="blocId">Bloc ID :</label>
+        <input type="number" placeholder="1 - 10000" min="1" max="10000" id="blocId">
+      </div>
 
       <div>
         <label for="routeSetterName">Route setter name :</label>
         <select type="text" id="routeSetterName"></select>
-      </div>
-
-      <div id="addRouteSetterButton">Add route setter</div>
-
-    </div>
-
-    <div id="addBloc">
-
-      <div>
-        <label for="blocId">Bloc ID :</label>
-        <input type="number" placeholder="between 1 and 10000" min="1" max="10000" id="blocId">
-      </div>
-
-      <div>
-        <label for="routeSetterName">Route setter name :</label>
-        <input type="text" id="routeSetterName">
       </div>
 
       <div>
@@ -36,7 +36,12 @@
         <input type="date" id="blocDate">
       </div>
 
-      <div id="addBlocButton">Add bloc</div>
+      <div>
+        <label for="blocPlace">Bloc place :</label>
+        <select type="text" id="blocPlace"></select>
+      </div>
+
+      <div id="addBlocButton" class="button">Add bloc</div>
 
     </div>
 

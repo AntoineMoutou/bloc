@@ -14,10 +14,10 @@ checkboxes.forEach(checkbox => checkbox.addEventListener("click",updatePerforman
 function addClimber() {
 
   let name = climberName.value;
-  let gender = "M"; //climberGender.value;
+  let gender = document.querySelector('input[name=climberGender]:checked').value; //climberGender.value;
   let url = "/addClimber/" + name + "/" + gender;
 
-  if (name != "" /* && gender != ""*/) {
+  if (name != "") {
     let b = true;
 
     let xhr = new XMLHttpRequest();
@@ -128,6 +128,7 @@ function updateSelectName() {
 function displayNames(jsonObj) {
 
   let idx = selectName.selectedIndex;
+  console.log(idx);
   let oldSize = selectName.length;
 
   selectName.innerHTML = "";
@@ -151,7 +152,7 @@ function displayNames(jsonObj) {
   if (oldSize==0) {
 
   } else {
-    jsonObj.contest.climbers[selectName[selectName.selectedIndex].value].blocs.forEach(function(blocId) {
+    jsonObj.contest.climbers[selectName.value].blocs.forEach(function(blocId) {
       document.getElementById(blocId).checked = true;
     })
   }

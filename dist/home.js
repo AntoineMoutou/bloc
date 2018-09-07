@@ -19,7 +19,6 @@ function updateLeaderboard() {
       }
       else {
         jsonObj = JSON.parse(this.responseText);
-        jsonObj.contest.climbers.sort((a,b) => (parseInt(a.score) < parseInt(b.score)) ); //sort climbers
         displayLeaderboard(jsonObj);
       }
     };
@@ -34,7 +33,7 @@ function displayLeaderboard(jsonObj) {
   leaderboard.innerHTML = "";
 
   let climberList = Object.keys(jsonObj.contest.climbers);
-  climberList.sort((a,b) => (parseInt(a.score) < parseInt(b.score)));
+  climberList.sort((a,b) => (parseInt(jsonObj.contest.climbers[a].score) < parseInt(jsonObj.contest.climbers[b].score)));
 
   // leaderboard header
   let divHeader = document.createElement("tr");

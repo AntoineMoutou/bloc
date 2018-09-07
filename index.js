@@ -26,6 +26,10 @@ app.get('/form', function(req, res) {
   res.sendFile(path.join(__dirname,'views/form.html'));
 });
 
+app.get('/settings', function(req, res) {
+  res.sendFile(path.join(__dirname,'views/settings.html'));
+});
+
 app.get('/getLeaderboard', function (req, res) {
 
   var jsonFilePath = path.join(__dirname, 'data/currentContest.json');
@@ -77,7 +81,7 @@ app.post('/addBloc/:id/:date/:place/:routeSetterName', function (req,res) {
     }
     else {
       // look if the id already exists in the json object to avoid idsakes
-      if (alreadyIded(req.params.id, obj)) {
+      if (blocAlreadyIded(req.params.id, obj)) {
         res.send('Bloc already exists.');
       }
       else {
@@ -147,7 +151,7 @@ app.post('/addClimber/:name/:gender', function (req, res) {
     }
     else {
       // look if the name already exists in the json object to avoid namesakes
-      if (alreadyNamed(req.params.name, obj)) {
+      if (climberAlreadyNamed(req.params.name, obj)) {
         res.send('Climber already exists.');
       }
       else {
@@ -223,7 +227,7 @@ app.post('/removePerformance/:name/:id', function (req, res) {
       else {
 
         // remove performance in json object
-        addPerformance(req.params.name, req.params.id, obj);
+        removePerformance(req.params.name, req.params.id, obj);
 
         // write new json object into the json file
         jsonfile.writeFile(jsonFilePath,obj,function(err) {
@@ -243,87 +247,87 @@ app.post('/removePerformance/:name/:id', function (req, res) {
 
 // additional methods
 function resetJsonFile() {
-  var obj = {"contest":{"blocs":{},"climbers":{},"routeSetters":{}}};
+  var obj = {"contest":{"blocs":{},"climbers":{},"routeSetters":{},"places":{}}};
   return obj;
 }
 
 
 function climberAlreadyNamed(name,obj) {
-  console.log(obj.contest.climbers.name);
-  return (obj.contest.climbers.name != undefined);
+  var climberList = Object.keys(obj.contest.climbers);
+  return (climberList.includes(name));
 }
 
 function addClimber(name,gender,obj) {
   // create and add a new climber
-  obj.contest.climbers[name]({"gender":gender,"score":0,"blocs":[]});
+  obj.contest.climbers[name]={"gender":gender,"score":0,"blocs":[]};
 }
 
 function routeSetterAlreadyNamed(name,obj){
-  console.log(obj.contest.routeSetters.name);
-  return (obj.contest.routeSetters.name != undefined);
+  var routesetterList = Object.keys(obj.contest.routeSetters);
+  return (routesetterList.includes(name));
 }
 
 function addRouteSetter(name,obj) {
   // create and add a new climber
-  obj.contest.routeSetters[name]({"blocs":[]});
+  obj.contest.routeSetters[name]={"blocs":[]};
 }
 
 function blocAlreadyIded(id,obj) {
-  console.log(obj.contest.blocs.id);
-  return (obj.contest.blocs.id != undefined);
+  var blocList = Object.keys(obj.contest.blocs);
+  return (blocList.includes(id));
 }
 
 function addBloc(id,date,place,routeSetterName,obj) {
   // create and add a new climber
-  obj.contest.bloc[id]({"date":date,"place":place,"routeSetter":routeSetterName,"point":1000,"climbers":[]});
+  obj.contest.blocs[id]={"date":date,"place":place,"routeSetter":routeSetterName,"point":1000,"climbers":[]};
+  obj.contest.routeSetters[routeSetterName].blocs.push(id);
 }
 
 
 function performanceAlreadyExists(name,id,obj) {
-  return (obj.contest.blocs.climbers.includes(name) && obj.contest.climbers.blocs.includes(id));
+  var climberList = Object.keys(obj.contest.climbers);
+  var blocList = Object.keys(obj.contest.blocs);
+  return (climberList.includes(name) && blocList.includes(id) && obj.contest.climbers[name].blocs.includes(id) && obj.contest.blocs[id].climbers.includes(name));
 }
 
 function addPerformance(name,id,obj) {
   obj.contest.blocs[id].climbers.push(name);
   var oldPoint = obj.contest.blocs[id].point;
-  console.log("before",oldPoint);
-  obj.contest.blocs[id].point = 1000/obj.contest.blocs[id].climbers.length;
-  console.log("after",oldPoint);
+  obj.contest.blocs[id].point = Math.round(1000/obj.contest.blocs[id].climbers.length);
 
   obj.contest.blocs[id].climbers.forEach(function(climberName) {
     if (climberName == name) {
       obj.contest.climbers[name].blocs.push(id);
-      obj.contest.climbers[name] += obj.contest.blocs[id].point;
+      obj.contest.climbers[name].score = Math.round(Math.round(obj.contest.climbers[name].score) + Math.round(obj.contest.blocs[id].point));
     } else {
-      obj.contest.climbers[climberName] += obj.contest.blocs[id].point - oldPoint;
+      obj.contest.climbers[climberName].score = Math.round( Math.round(obj.contest.climbers[climberName].score) + Math.round(obj.contest.blocs[id].point) - Math.round(oldPoint));
     }
   });
 }
 
 function removePerformance(name,id,obj) {
 
+  // remove the climber for bloc climber list
   var idx1 = obj.contest.blocs[id].climbers.findIndex(a => a==name);
   obj.contest.blocs[id].climbers.splice(idx1,1);
 
+  // set its new points
   var oldPoint = obj.contest.blocs[id].point;
-  console.log("before",oldPoint);
   if (obj.contest.blocs[id].climbers.length == 0) {
     obj.contest.blocs[id].point = 1000;
   }
   else {
-    obj.contest.blocs[id].point = 1000/obj.contest.blocs[id].climbers.length;
+    obj.contest.blocs[id].point = Math.round(1000/obj.contest.blocs[id].climbers.length);
   }
-  console.log("after",oldPoint);
 
+  // remove the bloc from climber bloc list and set his new score
+  var idx2 = obj.contest.climbers[name].blocs.findIndex(b => b==id);
+  obj.contest.climbers[name].blocs.splice(idx2,1);
+  obj.contest.climbers[name].score = Math.round(Math.round(obj.contest.climbers[name].score) - Math.round(oldPoint));
+
+  // set new score for all the bloc climber list
   obj.contest.blocs[id].climbers.forEach(function(climberName) {
-    if (climberName == name) {
-      var idx2 = obj.contest.climbers[name].blocs.findIndex(b => b==id);
-      obj.contest.climbers[name].blocs.splice(idx2,1);
-
-      obj.contest.climbers[name] -= oldPoint;
-    } else {
-      obj.contest.climbers[climberName] += obj.contest.blocs[id].point - oldPoint;
-    }
+    obj.contest.climbers[climberName].score = Math.round( Math.round(obj.contest.climbers[climberName].score) + Math.round(obj.contest.blocs[id].point) - Math.round(oldPoint));
   });
 }
 

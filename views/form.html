@@ -8,18 +8,24 @@
   <body>
     <div id="header"></div>
 
-    <div id="addClimber">
+    <div id="addClimber" class="addRow">
 
       <div>
         <label for="climberName">Name :</label>
-        <input type="text" placeholder="climber name" id="climberName">
+        <input type="text" id="climberName">
       </div>
 
-      <div id="addClimberButton">Add climber</div>
+      <div>
+        <label>Gender :</label>
+        <input type="radio" name="climberGender" value="men" checked> Men
+        <input type="radio" name="climberGender" value="wommen"> Women
+      </div>
+
+      <div id="addClimberButton" class="button">Add climber</div>
 
     </div>
 
-    <div id="addPerformance">
+    <div id="addPerformance" class="addCol">
 
       <div>
         <label for="selectName">Name :</label>
