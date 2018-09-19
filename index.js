@@ -222,7 +222,7 @@ app.post('/removePerformance/:name/:id', function (req, res) {
 
       // look if the name already exists in the json object to avoid namesakes
       if (!(performanceAlreadyExists(req.params.name, req.params.id, obj))) {
-        res.send("Performance doesn't exist.");
+        res.send("Performance already removed.");
       }
       else {
 
