@@ -6,14 +6,26 @@ html, body{
 }
 
 #header {
+  color: black;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 
   font-family:sans-serif;
 
   background-color: #94e200;
+
+  padding-left: 10px;
+}
+
+#title{
+  color: red;
+  text-decoration: none;
+}
+
+#icon2, #icon3{
+  margin: 10px;
 }
 
 #lb{
@@ -44,6 +56,10 @@ html, body{
 #leaderboard{
   width: 100%;
   font-size: 30px;
+
+  background-image: url('img/VDG.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .addRow{
@@ -83,4 +99,8 @@ html, body{
 
 #blocTitle{
   font-weight:bold;
+}
+
+#lBlocId{
+  margin:20px;
 }

@@ -4,12 +4,18 @@ let climberName = document.getElementById("climberName");
 let addClimberButton = document.getElementById("addClimberButton");
 
 let selectName = document.getElementById("selectName");
-let checkboxes = document.getElementsByName('perf');
+let selectBlocId = document.getElementById("selectBlocId");
+let addPerformanceButton = document.getElementById('addPerformanceButton');
+let removePerformanceButton = document.getElementById('removePerformanceButton');
 
 addClimberButton.addEventListener("click",addClimber);
 
 selectName.addEventListener("click",updateSelectName);
-checkboxes.forEach(checkbox => checkbox.addEventListener("click",updatePerformance));
+addPerformanceButton.addEventListener("click",addPerformance);
+removePerformanceButton.addEventListener("click",removePerformance);
+
+ setMaxBlocs();
+
 
 function addClimber() {
 
@@ -39,24 +45,19 @@ function addClimber() {
 }
 
 
-function updatePerformance(event) {
-  if (this.checked) {
-    addPerformance(event);
-  } else {
-    removePerformance(event);
-  }
-}
-
 function addPerformance(event) {
 
-  if (selectName.length == 0) {
+  if (selectName.value == "") {
     alert("Please select a climber.")
+  }
+  else if (selectBlocId.value == "") {
+    alert("Please select a bloc id.");
   }
   else {
     let checkbox = event.currentTarget;
     let selectedName = selectName[selectName.selectedIndex].value;
 
-    let id = checkbox.id;
+    let id = "bloc"+selectBlocId.value;
     let url = "/addPerformance/" + selectedName + "/" + id;
 
     let b = true;
@@ -77,14 +78,17 @@ function addPerformance(event) {
 }
 
 function removePerformance(event) {
-  if (selectName.length == 0) {
+  if (selectName.value == "") {
     alert("Please select a climber.")
+  }
+  else if (selectBlocId.value == "") {
+    alert("Please select a bloc id.");
   }
   else {
     let checkbox = event.currentTarget;
     let selectedName = selectName[selectName.selectedIndex].value;
 
-    let id = checkbox.id;
+    let id = "bloc"+selectBlocId.value;
     let url = "/removePerformance/" + selectedName + "/" + id;
 
     let b = true;
@@ -128,11 +132,9 @@ function updateSelectName() {
 function displayNames(jsonObj) {
 
   let idx = selectName.selectedIndex;
-  console.log(idx);
   let oldSize = selectName.length;
 
   selectName.innerHTML = "";
-  checkboxes.forEach(cb => {cb.checked = false});
 
   let climberList = Object.keys(jsonObj.contest.climbers);
   climberList.sort();
@@ -149,13 +151,52 @@ function displayNames(jsonObj) {
 
   selectName.selectedIndex = idx;
 
-  if (oldSize==0) {
+}
 
-  } else {
-    jsonObj.contest.climbers[selectName.value].blocs.forEach(function(blocId) {
-      document.getElementById(blocId).checked = true;
-    })
-  }
+
+function performanceAlreadyExists(name, blocId) {
+
+  let url = "/checkPerformance/" + name + "/" + blocId;
+
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", url, true);
+  xhr.onreadystatechange = function () {
+    if (this.readyState != 4 || this.status != 200) {
+      let response = this.responseText;
+      console.log(response);
+      console.log(response == "true");
+      if (response == "true") {
+        return true;
+      }
+      else if (response == "false"){
+        return false;
+      }
+    };
+  };
+  xhr.send();
+}
+
+function setMaxBlocs() {
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", "/getLeaderboard", true);
+  xhr.onreadystatechange = function () {
+    if (this.readyState != 4 || this.status != 200) {
+      if (this.responseText == 'Server error') {
+        alert(this.responseText);
+      }
+      else if (this.responseText == '') {
+
+      }
+      else {
+        jsonObj = JSON.parse(this.responseText);
+        let max = Object.keys(jsonObj.contest.blocs).length;
+        selectBlocId.max = max;
+        selectBlocId.placeholder = "1 - " + max;
+
+      }
+    }
+  };
+  xhr.send();
 }
 
 updateSelectName();

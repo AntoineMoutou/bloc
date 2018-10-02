@@ -8,10 +8,10 @@ let blocDate = document.getElementById("blocDate");
 let blocPlace = document.getElementById("blocPlace");
 let addBlocButton = document.getElementById("addBlocButton")
 
-addRouteSetterButton.addEventListener("click",addRouteSetter);
+//addRouteSetterButton.addEventListener("click",addRouteSetter);
 
-routeSetterName.addEventListener("click",updateRouteSetterName);
-blocPlace.addEventListener("click",updateBlocPlacesName);
+//routeSetterName.addEventListener("click",updateRouteSetterName);
+//blocPlace.addEventListener("click",updateBlocPlacesName);
 addBlocButton.addEventListener("click",addBloc);
 
 function addRouteSetter() {
@@ -39,7 +39,6 @@ function addRouteSetter() {
     alert("Please write a name.");
   }
 }
-
 
 function updateRouteSetterName() {
   let xhr = new XMLHttpRequest();
@@ -130,9 +129,9 @@ function displayBlocPlacesNames(jsonObj) {
 
 function addBloc() {
   let id = "bloc" + blocId.value;
-  let name = routeSetterName.value;
-  let date = blocDate.value;
-  let place = blocPlace.value;
+  let name = "Ouvreur"; // routeSetterName.value;
+  let date = Date.now();
+  let place = "VDG"; // blocPlace.value;
 
   let url = "/addBloc/" + id + "/" + date + "/" + place + "/" + name;
   if (id != "" && name != "" && date != "jj/mm/aaaa" && place != "") {
@@ -146,6 +145,7 @@ function addBloc() {
         if (response != "" && b) {
           b=false;
           alert(response);
+          setNextBlocID();
         }
       };
     };
@@ -156,6 +156,32 @@ function addBloc() {
   }
 }
 
-updateBlocPlacesName();
+function setNextBlocID(){
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", "/getLeaderboard", true);
+  xhr.onreadystatechange = function () {
+    if (this.readyState != 4 || this.status != 200) {
+      if (this.responseText == 'Server error') {
+        alert(this.responseText);
+      }
+      else if (this.responseText == '') {
 
-updateRouteSetterName();
+      }
+      else {
+        jsonObj = JSON.parse(this.responseText);
+        let max = Object.keys(jsonObj.contest.blocs).length;
+        blocId.innerHTML = max + 1;
+        blocId.value = max + 1;
+      }
+    }
+  };
+  xhr.send();
+}
+
+setNextBlocID();
+
+document.getElementById("addRouteSetter").style.display = "none";
+
+//updateBlocPlacesName();
+
+//updateRouteSetterName();

@@ -243,6 +243,28 @@ app.post('/removePerformance/:name/:id', function (req, res) {
   }); // end of readFile
 }); // end of post method removePerformance
 
+app.post('/checkPerformance/:name/:id', function (req, res) {
+  // path of current data of the contest
+  var jsonFilePath = path.join(__dirname, 'data/currentContest.json');
+
+  // read the json file and extract the json object it contains into obj variable
+  jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
+    if (err) {
+      res.send('Server error readfile (checkPerformance)');
+    }
+    else {
+
+      // look if the name already exists in the json object to avoid namesakes
+      if (performanceAlreadyExists(req.params.name, req.params.id, obj)) {
+        res.send(true);
+      }
+      else {
+        res.send(false);
+      } // end of else (alreadyNamed)
+    } //end of else
+  }); // end of readFile
+}); // end of post method add performance
+
 
 
 // additional methods
