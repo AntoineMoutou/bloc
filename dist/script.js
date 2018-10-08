@@ -10,11 +10,23 @@ function setHeader() {
   let title = document.createElement("h1");
   title.innerHTML = "VDG Cup";
 
+  let img1 = document.createElement("img");
+  img1.src = "img/VDG.png";
+  img1.width = "64";
+  img1.height = "64 ";
+
+  let img1bis = document.createElement("img");
+  img1bis.src = "img/trophy.png";
+  img1bis.width = "64";
+  img1bis.height = "64 ";
+
+
   let a1 = document.createElement("a");
   a1.href = "/home";
   a1.id = "title";
 
-  a1.appendChild(title);
+  a1.appendChild(img1);
+  a1.appendChild(img1bis);
 
   header.appendChild(a1);
 
@@ -29,14 +41,14 @@ function setHeader() {
 
   let img2 = document.createElement("img");
   img2.src = "img/form.png";
-  img2.width = "32";
-  img2.height = "32 ";
+  img2.width = "64";
+  img2.height = "64 ";
   a2.id = "icon2";
 
   let img3 = document.createElement("img");
   img3.src = "img/settings.png";
-  img3.width = "32";
-  img3.height = "32 ";
+  img3.width = "64";
+  img3.height = "64 ";
   a3.id = "icon3";
 
   a2.appendChild(img2);

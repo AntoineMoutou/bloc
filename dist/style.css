@@ -16,7 +16,7 @@ html, body{
 
   background-color: #94e200;
 
-  padding-left: 10px;
+  padding: 10px;
 }
 
 #title{
@@ -57,9 +57,14 @@ html, body{
   width: 100%;
   font-size: 30px;
 
-  background-image: url('img/VDG.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+
+}
+.leaderboard{
+  width:50%;
 }
 
 .addRow{

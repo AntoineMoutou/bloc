@@ -1,5 +1,6 @@
 
-let leaderboard = document.getElementById("leaderboard");
+let mLeaderboard = document.getElementById("mLeaderboard");
+let wLeaderboard = document.getElementById("wLeaderboard");
 let updateButton = document.getElementById("updateButton");
 
 updateButton.addEventListener("click", updateLeaderboard);
@@ -28,38 +29,48 @@ function updateLeaderboard() {
 }
 
 function displayLeaderboard(jsonObj) {
-  let rank = 1;
+  let wRank = 1;
+  let mRank = 1;
 
-  leaderboard.innerHTML = "";
+  mLeaderboard.innerHTML = "";
+  wLeaderboard.innerHTML = "";
 
   let climberList = Object.keys(jsonObj.contest.climbers);
   climberList.sort((a,b) => (parseInt(jsonObj.contest.climbers[a].score) < parseInt(jsonObj.contest.climbers[b].score)));
 
-  // leaderboard header
-  let divHeader = document.createElement("tr");
-  let divHName = document.createElement("th");
-  let divHRank = document.createElement("th");
-  let divHScore = document.createElement("th");
+  for (var i = 0; i < 2; i++) {
 
-  divHName.innerHTML = "Name";
-  divHScore.innerHTML = "Score";
-  divHRank.innerHTML = "Rank";
+    // leaderboard header
+    let divHeader = document.createElement("tr");
+    let divHName = document.createElement("th");
+    let divHRank = document.createElement("th");
+    let divHScore = document.createElement("th");
 
-  divHRank.style.width = "20%";
-  divHName.style.width = "60%";
-  divHScore.style.width = "20%";
 
-  divHeader.appendChild(divHRank);
-  divHeader.appendChild(divHName);
-  divHeader.appendChild(divHScore);
+    divHScore.innerHTML = "Score";
+    divHRank.innerHTML = "Rank";
 
-  divHeader.style.display = "flex";
-  divHeader.style.flexDirction = "row";
-  divHeader.style.justifyContent = "space-around";
-  divHeader.style.backgroundColor = "grey";
+    divHRank.style.width = "20%";
+    divHName.style.width = "60%";
+    divHScore.style.width = "20%";
 
-  leaderboard.appendChild(divHeader);
+    divHeader.appendChild(divHRank);
+    divHeader.appendChild(divHName);
+    divHeader.appendChild(divHScore);
 
+    divHeader.style.display = "flex";
+    divHeader.style.flexDirction = "row";
+    divHeader.style.justifyContent = "space-around";
+    divHeader.style.backgroundColor = "grey";
+
+    if (i == 0) {
+      divHName.innerHTML = "Name (men)";
+      mLeaderboard.appendChild(divHeader);
+    } else {
+      divHName.innerHTML = "Name (women)";
+      wLeaderboard.appendChild(divHeader);
+    }
+  }
   climberList.forEach(function(climber) {
     name = climber;
     score = jsonObj.contest.climbers[climber].score;
@@ -71,7 +82,6 @@ function displayLeaderboard(jsonObj) {
 
     divName.innerHTML = name;
     divScore.innerHTML = score;
-    divRank.innerHTML = rank++;
 
     divRank.style.width = "20%";
     divName.style.width = "60%";
@@ -84,7 +94,15 @@ function displayLeaderboard(jsonObj) {
     divClimber.style.display = "flex";
     divClimber.style.flexDirction = "row";
     divClimber.style.justifyContent = "space-around";
+    divClimber.style.backgroundColor = "#DDDDDD";
 
-    leaderboard.appendChild(divClimber);
+
+    if (jsonObj.contest.climbers[climber].gender == "men") {
+      divRank.innerHTML = mRank++;
+      mLeaderboard.appendChild(divClimber);
+    } else {
+      divRank.innerHTML = wRank++;
+      wLeaderboard.appendChild(divClimber);
+    }
   })
 }
