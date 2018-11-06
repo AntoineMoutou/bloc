@@ -36,7 +36,9 @@ function displayLeaderboard(jsonObj) {
   wLeaderboard.innerHTML = "";
 
   let climberList = Object.keys(jsonObj.contest.climbers);
-  climberList.sort((a,b) => (parseInt(jsonObj.contest.climbers[a].score) < parseInt(jsonObj.contest.climbers[b].score)));
+  climberList.sort((a,b) => (parseInt(jsonObj.contest.climbers[b].score) - parseInt(jsonObj.contest.climbers[a].score)));
+
+  console.log(climberList);
 
   for (var i = 0; i < 2; i++) {
 
@@ -72,8 +74,8 @@ function displayLeaderboard(jsonObj) {
     }
   }
   climberList.forEach(function(climber) {
-    name = climber;
-    score = jsonObj.contest.climbers[climber].score;
+    let name = climber;
+    let score = jsonObj.contest.climbers[climber].score;
 
     let divClimber = document.createElement("tr");
     let divName = document.createElement("td");
