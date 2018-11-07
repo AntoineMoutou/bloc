@@ -267,6 +267,16 @@ app.post('/checkPerformance/:name/:id', function (req, res) {
 
 
 
+String.prototype.includes = function (str) {
+  var returnValue = false;
+
+  if (this.indexOf(str) !== -1) {
+    returnValue = true;
+  }
+
+  return returnValue;
+}
+
 // additional methods
 function resetJsonFile() {
   var obj = {"contest":{"blocs":{},"climbers":{},"routeSetters":{},"places":{}}};
