@@ -12,8 +12,8 @@ function setHeader() {
 
   let img1 = document.createElement("img");
   img1.src = "img/VDG.png";
-  img1.width = "64";
-  img1.height = "64 ";
+  img1.width = "128";
+  img1.height = "128 ";
 
   let img1bis = document.createElement("img");
   img1bis.src = "img/trophy.png";
@@ -24,11 +24,13 @@ function setHeader() {
   let a1 = document.createElement("a");
   a1.href = "/home";
   a1.id = "title";
+  a1.style.width = "200px";
 
-  a1.appendChild(img1);
   a1.appendChild(img1bis);
 
   header.appendChild(a1);
+  header.appendChild(img1);
+
 
   //add link to form page and settings page
   let div = document.createElement("div");
@@ -56,6 +58,9 @@ function setHeader() {
 
   div.appendChild(a2);
   div.appendChild(a3);
+
+  div.style.width = "200px"; 
+
 
   header.appendChild(div);
 
