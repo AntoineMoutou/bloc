@@ -1,66 +1,15 @@
 {
 	"contest": {
-		"blocs": [{
-			"id": "bloc1",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc2",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc3",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc4",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc5",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc6",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc7",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc8",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc9",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc10",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc11",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc12",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc13",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc14",
-			"point": 1000,
-			"climbers": []
-		}, {
-			"id": "bloc15",
-			"point": 1000,
-			"climbers": []
-		}],
-		"climbers": []
+		"blocs": {},
+		"climbers": {},
+		"routeSetters": {
+			"Ouvreur": {
+				"blocs": []
+			}
+		},
+		"places": {
+			"Salle 1": {},
+			"Salle 2": {}
+		}
 	}
 }
