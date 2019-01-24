@@ -48,6 +48,35 @@ app.get('/getLeaderboard', function (req, res) {
 
 });
 
+app.get('/updateLeaderboard', function (req, res) {
+
+  var jsonFilePath = path.join(__dirname, 'data/currentContest.json');
+
+  jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
+    if (err) {
+      res.send('Server error readfile (getLeaderboard)');
+    }
+    else {
+
+      updateBlocs(obj);
+      updateClimbers(obj);
+
+      // write new json object into the json file
+      jsonfile.writeFile(jsonFilePath,obj,function(err) {
+        if (err) {
+          res.send('Server error writeFile (updateLeaderboard)');
+        }
+        else {
+          res.setHeader('Content-Type', 'application/json');
+          res.json(obj);
+        }
+      }); // end of writeFile
+
+    }//end of else
+  });
+
+});
+
 
 // POST methods routes
 app.post('/resetJsonFile', function (req,res) {
@@ -324,17 +353,8 @@ function performanceAlreadyExists(name,id,obj) {
 
 function addPerformance(name,id,obj) {
   obj.contest.blocs[id].climbers.push(name);
-  var oldPoint = obj.contest.blocs[id].point;
-  obj.contest.blocs[id].point = Math.round(1000/obj.contest.blocs[id].climbers.length);
+  obj.contest.climbers[name].blocs.push(id);
 
-  obj.contest.blocs[id].climbers.forEach(function(climberName) {
-    if (climberName == name) {
-      obj.contest.climbers[name].blocs.push(id);
-      obj.contest.climbers[name].score = Math.round(Math.round(obj.contest.climbers[name].score) + Math.round(obj.contest.blocs[id].point));
-    } else {
-      obj.contest.climbers[climberName].score = Math.round( Math.round(obj.contest.climbers[climberName].score) + Math.round(obj.contest.blocs[id].point) - Math.round(oldPoint));
-    }
-  });
 }
 
 function removePerformance(name,id,obj) {
@@ -343,24 +363,34 @@ function removePerformance(name,id,obj) {
   var idx1 = obj.contest.blocs[id].climbers.findIndex(a => a==name);
   obj.contest.blocs[id].climbers.splice(idx1,1);
 
-  // set its new points
-  var oldPoint = obj.contest.blocs[id].point;
-  if (obj.contest.blocs[id].climbers.length == 0) {
-    obj.contest.blocs[id].point = 1000;
-  }
-  else {
-    obj.contest.blocs[id].point = Math.round(1000/obj.contest.blocs[id].climbers.length);
-  }
-
   // remove the bloc from climber bloc list and set his new score
   var idx2 = obj.contest.climbers[name].blocs.findIndex(b => b==id);
   obj.contest.climbers[name].blocs.splice(idx2,1);
-  obj.contest.climbers[name].score = Math.round(Math.round(obj.contest.climbers[name].score) - Math.round(oldPoint));
 
-  // set new score for all the bloc climber list
-  obj.contest.blocs[id].climbers.forEach(function(climberName) {
-    obj.contest.climbers[climberName].score = Math.round( Math.round(obj.contest.climbers[climberName].score) + Math.round(obj.contest.blocs[id].point) - Math.round(oldPoint));
-  });
+}
+
+function updateBlocs(obj) {
+  var blocList = Object.keys(obj.contest.blocs);
+  blocList.forEach( function (blocId){
+    var dateOfCreation = obj.contest.blocs[blocId].date;
+    var diff = Date.now() - dateOfCreation;
+    if (diff > (35*24*3600*1000)){
+      obj.contest.blocs[blocId].point = 0;
+    }
+    else {
+      obj.contest.blocs[blocId].point = Math.round(1000/obj.contest.blocs[blocId].climbers.length);
+    }
+  })
+}
+
+function updateClimbers(obj) {
+  var climberList = Object.keys(obj.contest.climbers);
+  climberList.forEach( function (climberName) {
+    obj.contest.climbers[climberName].score = 0;
+    obj.contest.climbers[climberName].blocs.forEach(function (blocId) {
+      obj.contest.climbers[climberName].score += obj.contest.blocs[blocId].point;
+    })
+  })
 }
 
 app.listen(port, function () {

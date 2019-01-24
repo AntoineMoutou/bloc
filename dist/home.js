@@ -9,7 +9,7 @@ updateButton.addEventListener("click", updateLeaderboard);
 
 function updateLeaderboard() {
   let xhr = new XMLHttpRequest();
-  xhr.open("GET", "/getLeaderboard", true);
+  xhr.open("GET", "/updateLeaderboard", true);
   xhr.onreadystatechange = function () {
     if (this.readyState != 4 || this.status != 200) {
       if (this.responseText == 'Server error') {
