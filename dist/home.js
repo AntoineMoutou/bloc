@@ -19,8 +19,8 @@ function updateLeaderboard() {
 
       }
       else {
-        jsonObj = JSON.parse(this.responseText);
-        displayLeaderboard(jsonObj);
+        leaderboardObject = JSON.parse(this.responseText);
+        displayLeaderboard(leaderboardObject);
       }
     };
   };
@@ -28,17 +28,19 @@ function updateLeaderboard() {
 
 }
 
-function displayLeaderboard(jsonObj) {
+function displayLeaderboard(leaderboardObject) {
+  console.log("coucou");
   let wRank = 1;
   let mRank = 1;
 
   mLeaderboard.innerHTML = "";
   wLeaderboard.innerHTML = "";
 
-  let climberList = Object.keys(jsonObj.contest.climbers);
-  climberList.sort((a,b) => (parseInt(jsonObj.contest.climbers[b].score) - parseInt(jsonObj.contest.climbers[a].score)));
 
-  console.log(climberList);
+  leaderboardObject["men"].sort((a,b) => (parseInt(b.score) - parseInt(a.score)));
+  leaderboardObject["women"].sort((a,b) => (parseInt(b.score) - parseInt(a.score)));
+
+  console.log(leaderboardObject);
 
   for (var i = 0; i < 2; i++) {
 
@@ -73,9 +75,10 @@ function displayLeaderboard(jsonObj) {
       wLeaderboard.appendChild(divHeader);
     }
   }
-  climberList.forEach(function(climber) {
-    let name = climber;
-    let score = jsonObj.contest.climbers[climber].score;
+
+  leaderboardObject["men"].forEach(function(climber) {
+    let name = climber.name;
+    let score = climber.score;
 
     let divClimber = document.createElement("tr");
     let divName = document.createElement("td");
@@ -98,13 +101,41 @@ function displayLeaderboard(jsonObj) {
     divClimber.style.justifyContent = "space-around";
     divClimber.style.backgroundColor = "#DDDDDD";
 
+    divRank.innerHTML = mRank++;
+    mLeaderboard.appendChild(divClimber);
 
-    if (jsonObj.contest.climbers[climber].gender == "men") {
-      divRank.innerHTML = mRank++;
-      mLeaderboard.appendChild(divClimber);
-    } else {
-      divRank.innerHTML = wRank++;
-      wLeaderboard.appendChild(divClimber);
-    }
-  })
+  });
+
+  leaderboardObject["women"].forEach(function(climber) {
+    let name = climber.name;
+    let score = climber.score;
+
+    let divClimber = document.createElement("tr");
+    let divName = document.createElement("td");
+    let divRank = document.createElement("td");
+    let divScore = document.createElement("td");
+
+    divName.innerHTML = name;
+    divScore.innerHTML = score;
+
+    divRank.style.width = "20%";
+    divName.style.width = "60%";
+    divScore.style.width = "20%";
+
+    divClimber.appendChild(divRank);
+    divClimber.appendChild(divName);
+    divClimber.appendChild(divScore);
+
+    divClimber.style.display = "flex";
+    divClimber.style.flexDirction = "row";
+    divClimber.style.justifyContent = "space-around";
+    divClimber.style.backgroundColor = "#DDDDDD";
+
+    divRank.innerHTML = wRank++;
+    wLeaderboard.appendChild(divClimber);
+
+  });
+
+
+
 }

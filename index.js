@@ -60,6 +60,7 @@ app.get('/updateLeaderboard', function (req, res) {
 
       updateBlocs(obj);
       updateClimbers(obj);
+      var leaderboardObject = createLeaderboardObject(obj);
 
       // write new json object into the json file
       jsonfile.writeFile(jsonFilePath,obj,function(err) {
@@ -68,7 +69,7 @@ app.get('/updateLeaderboard', function (req, res) {
         }
         else {
           res.setHeader('Content-Type', 'application/json');
-          res.json(obj);
+          res.json(leaderboardObject);
         }
       }); // end of writeFile
 
@@ -374,7 +375,7 @@ function updateBlocs(obj) {
   blocList.forEach( function (blocId){
     var dateOfCreation = obj.contest.blocs[blocId].date;
     var diff = Date.now() - dateOfCreation;
-    if (diff > (35*24*3600*1000)){
+    if (diff > (40*24*3600*1000)){
       obj.contest.blocs[blocId].point = 0;
     }
     else {
@@ -391,6 +392,18 @@ function updateClimbers(obj) {
       obj.contest.climbers[climberName].score += obj.contest.blocs[blocId].point;
     })
   })
+}
+
+function createLeaderboardObject(obj) {
+  var leaderboardObject = {"men":[], "women":[]};
+  var climberList = Object.keys(obj.contest.climbers);
+  climberList.forEach( function (climberName) {
+    var climberObject = {};
+    climberObject.name = climberName;
+    climberObject.score = obj.contest.climbers[climberName].score;
+    leaderboardObject[obj.contest.climbers[climberName].gender].push(climberObject);
+  })
+  return leaderboardObject;
 }
 
 app.listen(port, function () {
