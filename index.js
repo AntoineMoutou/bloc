@@ -134,6 +134,40 @@ app.post('/addBloc/:id/:date/:place/:routeSetterName', function (req,res) {
   }); // end of readFile
 })
 
+app.post('/deleteBloc/:id', function (req,res) {
+  // path of current data of the contest
+  var jsonFilePath = path.join(__dirname, 'data/currentContest.json');
+
+  // read the json file and extract the json object it contains into obj variable
+  jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
+    if (err) {
+      res.send('Server error readfile (deleteBloc)');
+    }
+    else {
+      // look if the id already exists in the json object to avoid mistakes
+      if (!(blocAlreadyIded(req.params.id, obj))) {
+        res.send('Bloc does not exist.');
+      }
+      else {
+
+        // delete bloc in json object
+        deleteBloc(req.params.id, obj);
+
+        // write new json object into the json file
+        jsonfile.writeFile(jsonFilePath,obj,function(err) {
+          if (err) {
+            res.send('Server error writeFile (deleteBloc)');
+          }
+          else {
+            res.send("Bloc deleted !");
+          }
+        }); // end of writeFile
+
+      } // end of else (alreadyIded)
+    }
+  }); // end of readFile
+})
+
 app.post('/addRouteSetter/:name', function (req, res) {
 
   // path of current data of the contest
@@ -345,6 +379,11 @@ function addBloc(id,date,place,routeSetterName,obj) {
   obj.contest.routeSetters[routeSetterName].blocs.push(id);
 }
 
+function deleteBloc(id,date,place,routeSetterName,obj) {
+  // delete bloc by setting its score at 0
+  obj.contest.blocs[id].point = 0;
+}
+
 
 function performanceAlreadyExists(name,id,obj) {
   var climberList = Object.keys(obj.contest.climbers);
@@ -375,9 +414,11 @@ function updateBlocs(obj) {
   blocList.forEach( function (blocId){
     var dateOfCreation = obj.contest.blocs[blocId].date;
     var diff = Date.now() - dateOfCreation;
-    if (diff > (40*24*3600*1000)){
-      obj.contest.blocs[blocId].point = 0;
+    if (obj.contest.blocs[blocId].point = 0)){
     }
+    // else if (diff > (40*24*3600*1000)){
+    //   obj.contest.blocs[blocId].point = 0;
+    // }
     else {
       obj.contest.blocs[blocId].point = Math.round(1000/obj.contest.blocs[blocId].climbers.length);
     }

@@ -6,13 +6,17 @@ let blocId = document.getElementById("blocId");
 let routeSetterName = document.getElementById("routeSetterName");
 let blocDate = document.getElementById("blocDate");
 let blocPlace = document.getElementById("blocPlace");
-let addBlocButton = document.getElementById("addBlocButton")
+let addBlocButton = document.getElementById("addBlocButton");
+
+let blocToDeleteId = document.getElementById("blocToDeleteId");
+let deleteBlocButton = document.getElementById("deleteBlocButton");
 
 //addRouteSetterButton.addEventListener("click",addRouteSetter);
 
 //routeSetterName.addEventListener("click",updateRouteSetterName);
 //blocPlace.addEventListener("click",updateBlocPlacesName);
 addBlocButton.addEventListener("click",addBloc);
+deleteBlocButton.addEventListener("click", deleteBloc);
 
 function addRouteSetter() {
 
@@ -156,6 +160,32 @@ function addBloc() {
   }
 }
 
+function deleteBloc() {
+  let id = "bloc" + blocToDeleteId.value;
+
+  let url = "/deleteBloc/" + id;
+  if (id != "") {
+    let b = true;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.onreadystatechange = function () {
+      if (this.readyState != 4 || this.status != 200) {
+        let response = this.responseText;
+        if (response != "" && b) {
+          b=false;
+          alert(response);
+          setNextBlocID();
+        }
+      };
+    };
+    xhr.send();
+  }
+  else {
+    alert("Please choose a bloc to delete.");
+  }
+}
+
 function setNextBlocID(){
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/getLeaderboard", true);
@@ -169,9 +199,19 @@ function setNextBlocID(){
       }
       else {
         jsonObj = JSON.parse(this.responseText);
-        let max = Object.keys(jsonObj.contest.blocs).length;
-        blocId.innerHTML = max + 1;
-        blocId.value = max + 1;
+        let blocList = Object.keys(jsonObj.contest.blocs);
+        let maxBlocId = blocList[0];
+
+        blocList.forEach(function(blocId) {
+          if (blocId >= maxBlocId) {
+            maxBlocId = blocId;
+          }
+        })
+
+        let newBlocId = maxBlocId +1;
+        blocId.innerHTML = newBlocId;
+        blocId.value = newBlocId;
+        blocToDeleteId.max = newBlocId;
       }
     }
   };
