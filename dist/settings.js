@@ -172,8 +172,8 @@ function deleteBloc() {
     xhr.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
         let response = this.responseText;
+        console.log(this.responseText);
         if (response != "" && b) {
-          b=false;
           alert(response);
           setNextBlocID();
         }

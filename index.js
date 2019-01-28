@@ -63,7 +63,6 @@ app.get('/getMaxBlocId', function (req, res) {
 
       blocList.forEach(function(blocId) {
         let nb = parseInt(blocId.slice(4));
-        console.log(nb);
         if (nb >= maxBlocId) {
           maxBlocId = nb;
         }
@@ -442,7 +441,7 @@ function updateBlocs(obj) {
   blocList.forEach( function (blocId){
     var dateOfCreation = obj.contest.blocs[blocId].date;
     var diff = Date.now() - dateOfCreation;
-    if (obj.contest.blocs[blocId].point = 0){
+    if (obj.contest.blocs[blocId].point == 0){
     }
     // else if (diff > (40*24*3600*1000)){
     //   obj.contest.blocs[blocId].point = 0;
