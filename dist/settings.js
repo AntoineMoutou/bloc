@@ -29,7 +29,7 @@ function addRouteSetter() {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.onreadystatechange = function () {
-      if (this.readyState != 4 || this.status != 200) {
+      if (this.readyState == 4 && this.status == 200) {
         let response = this.responseText;
         if (response != "" && b) {
           b=false;
@@ -48,7 +48,7 @@ function updateRouteSetterName() {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/getLeaderboard", true);
   xhr.onreadystatechange = function () {
-    if (this.readyState != 4 || this.status != 200) {
+    if (this.readyState == 4 && this.status == 200) {
       if (this.responseText == 'Server error') {
         alert(this.responseText);
       }
@@ -91,7 +91,7 @@ function updateBlocPlacesName() {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/getLeaderboard", true);
   xhr.onreadystatechange = function () {
-    if (this.readyState != 4 || this.status != 200) {
+    if (this.readyState == 4 && this.status == 200) {
       if (this.responseText == 'Server error') {
         alert(this.responseText);
       }
@@ -144,7 +144,7 @@ function addBloc() {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.onreadystatechange = function () {
-      if (this.readyState != 4 || this.status != 200) {
+      if (this.readyState == 4 && this.status == 200) {
         let response = this.responseText;
         if (response != "" && b) {
           b=false;
@@ -170,7 +170,7 @@ function deleteBloc() {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.onreadystatechange = function () {
-      if (this.readyState != 4 || this.status != 200) {
+      if (this.readyState == 4 && this.status == 200) {
         let response = this.responseText;
         if (response != "" && b) {
           b=false;
@@ -188,30 +188,23 @@ function deleteBloc() {
 
 function setNextBlocID(){
   let xhr = new XMLHttpRequest();
-  xhr.open("GET", "/getLeaderboard", true);
+  xhr.open("GET", "/getMaxBlocId", true);
   xhr.onreadystatechange = function () {
-    if (this.readyState != 4 || this.status != 200) {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log(this.responseText);
+
       if (this.responseText == 'Server error') {
         alert(this.responseText);
       }
       else if (this.responseText == '') {
-
+        console.log('ici');
       }
       else {
-        jsonObj = JSON.parse(this.responseText);
-        let blocList = Object.keys(jsonObj.contest.blocs);
-        let maxBlocId = blocList[0];
-
-        blocList.forEach(function(blocId) {
-          if (blocId >= maxBlocId) {
-            maxBlocId = blocId;
-          }
-        })
-
-        let newBlocId = maxBlocId +1;
-        blocId.innerHTML = newBlocId;
-        blocId.value = newBlocId;
-        blocToDeleteId.max = newBlocId;
+        let maxBlocId = parseInt(this.responseText);
+        blocId.innerHTML = maxBlocId +1;
+        blocId.value = maxBlocId +1;
+        blocToDeleteId.max = maxBlocId;
+        blocToDeleteId.placeholder = "1 - " + maxBlocId;
       }
     }
   };

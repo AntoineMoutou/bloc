@@ -29,7 +29,7 @@ function addClimber() {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.onreadystatechange = function () {
-      if (this.readyState != 4 || this.status != 200) {
+      if (this.readyState &= 4 && this.status == 200) {
         let response = this.responseText;
         if (response != "" && b) {
           b=false;
@@ -65,7 +65,7 @@ function addPerformance(event) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.onreadystatechange = function () {
-      if (this.readyState != 4 || this.status != 200) {
+      if (this.readyState == 4 && this.status == 200) {
         let response = this.responseText;
         if (response != "" && b) {
           b=false;
@@ -96,7 +96,7 @@ function removePerformance(event) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.onreadystatechange = function () {
-      if (this.readyState != 4 || this.status != 200) {
+      if (this.readyState == 4 && this.status == 200) {
         let response = this.responseText;
         if (response != "" && b) {
           b=false;
@@ -113,7 +113,7 @@ function updateSelectName() {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/getLeaderboard", true);
   xhr.onreadystatechange = function () {
-    if (this.readyState != 4 || this.status != 200) {
+    if (this.readyState == 4 && this.status == 200) {
       if (this.responseText == 'Server error') {
         alert(this.responseText);
       }
@@ -161,10 +161,8 @@ function performanceAlreadyExists(name, blocId) {
   let xhr = new XMLHttpRequest();
   xhr.open("POST", url, true);
   xhr.onreadystatechange = function () {
-    if (this.readyState != 4 || this.status != 200) {
+    if (this.readyState == 4 && this.status == 200) {
       let response = this.responseText;
-      console.log(response);
-      console.log(response == "true");
       if (response == "true") {
         return true;
       }
@@ -178,9 +176,9 @@ function performanceAlreadyExists(name, blocId) {
 
 function setMaxBlocs() {
   let xhr = new XMLHttpRequest();
-  xhr.open("GET", "/getLeaderboard", true);
+  xhr.open("GET", "/getMaxBlocId", true);
   xhr.onreadystatechange = function () {
-    if (this.readyState != 4 || this.status != 200) {
+    if (this.readyState == 4 && this.status == 200) {
       if (this.responseText == 'Server error') {
         alert(this.responseText);
       }
@@ -188,8 +186,7 @@ function setMaxBlocs() {
 
       }
       else {
-        jsonObj = JSON.parse(this.responseText);
-        let max = Object.keys(jsonObj.contest.blocs).length;
+        max = parseInt(this.responseText);
         selectBlocId.max = max;
         selectBlocId.placeholder = "1 - " + max;
 

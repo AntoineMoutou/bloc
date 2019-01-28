@@ -11,7 +11,7 @@ function updateLeaderboard() {
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/updateLeaderboard", true);
   xhr.onreadystatechange = function () {
-    if (this.readyState != 4 || this.status != 200) {
+    if (this.readyState == 4 && this.status == 200) {
       if (this.responseText == 'Server error') {
         alert(this.responseText);
       }
@@ -29,7 +29,6 @@ function updateLeaderboard() {
 }
 
 function displayLeaderboard(leaderboardObject) {
-  console.log("coucou");
   let wRank = 1;
   let mRank = 1;
 
@@ -39,8 +38,6 @@ function displayLeaderboard(leaderboardObject) {
 
   leaderboardObject["men"].sort((a,b) => (parseInt(b.score) - parseInt(a.score)));
   leaderboardObject["women"].sort((a,b) => (parseInt(b.score) - parseInt(a.score)));
-
-  console.log(leaderboardObject);
 
   for (var i = 0; i < 2; i++) {
 

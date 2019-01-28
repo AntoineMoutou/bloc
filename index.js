@@ -40,9 +40,37 @@ app.get('/getLeaderboard', function (req, res) {
     }
     else {
 
-      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Type', 'text/plain');
       res.json(obj);
 
+    }//end of else
+  });
+
+});
+
+app.get('/getMaxBlocId', function (req, res) {
+
+  var jsonFilePath = path.join(__dirname, 'data/currentContest.json');
+
+  jsonfile.readFile(jsonFilePath,'utf8',function(err,obj) {
+    if (err) {
+      res.send('Server error readfile (getLeaderboard)');
+    }
+    else {
+
+      let blocList = Object.keys(obj.contest.blocs);
+      let maxBlocId = parseInt(blocList[0].slice(4));
+
+      blocList.forEach(function(blocId) {
+        let nb = parseInt(blocId.slice(4));
+        console.log(nb);
+        if (nb >= maxBlocId) {
+          maxBlocId = nb;
+        }
+      });
+
+      res.send(String(maxBlocId));
+      //res.setHeader('Content-Type', 'text/plain');
     }//end of else
   });
 
@@ -68,7 +96,7 @@ app.get('/updateLeaderboard', function (req, res) {
           res.send('Server error writeFile (updateLeaderboard)');
         }
         else {
-          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Content-Type', 'text/plain');
           res.json(leaderboardObject);
         }
       }); // end of writeFile
@@ -379,7 +407,7 @@ function addBloc(id,date,place,routeSetterName,obj) {
   obj.contest.routeSetters[routeSetterName].blocs.push(id);
 }
 
-function deleteBloc(id,date,place,routeSetterName,obj) {
+function deleteBloc(id,obj) {
   // delete bloc by setting its score at 0
   obj.contest.blocs[id].point = 0;
 }
@@ -414,7 +442,7 @@ function updateBlocs(obj) {
   blocList.forEach( function (blocId){
     var dateOfCreation = obj.contest.blocs[blocId].date;
     var diff = Date.now() - dateOfCreation;
-    if (obj.contest.blocs[blocId].point = 0)){
+    if (obj.contest.blocs[blocId].point = 0){
     }
     // else if (diff > (40*24*3600*1000)){
     //   obj.contest.blocs[blocId].point = 0;
